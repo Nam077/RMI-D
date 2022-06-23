@@ -34,10 +34,11 @@ import com.toedter.calendar.JDateChooser;
 
 public class Manage extends JFrame {
 	public String path = "E:\\Java\\Eclipse\\Manage\\Imgs\\";
+	Timer timer;
+    int index = 1;
     public JPanel contentPane, LogoutPanel;
     public JTable tableUser;
-    Timer timer;
-    int index = 1;
+    
     public JLabel AuthUser;
     public JComboBox roleUser, nameUserManage, nameVehicleManage,chartYear;
     public JTextField searchUser;
