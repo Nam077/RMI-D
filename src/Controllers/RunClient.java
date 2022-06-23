@@ -481,7 +481,7 @@ public class RunClient {
 				manageVehicleInput.setPlate(plate);
 				manageVehicleInput.setEngine_no(engine_no);
 				manageVehicleInput.setChassis_no(chassis_no);
-			
+
 				try {
 					Message message = client.insertManageVehicle(manageVehicleInput);
 					if (message.getCheck()) {
@@ -509,7 +509,7 @@ public class RunClient {
 				String name = manage.nameManage.getText();
 				String engine_no = manage.engine_noMange.getText();
 				String chassis_no = manage.chassis_noManage.getText();
-			
+
 				manageVehicleInput.setId(Integer.parseInt(id));
 				Integer id_user = getIdFromString(nameUser);
 				manageVehicleInput.setUser_id(id_user);
@@ -615,8 +615,7 @@ public class RunClient {
 				}
 			}
 		});
-		
-		
+
 		certificate.exitCer.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -625,14 +624,13 @@ public class RunClient {
 			}
 		});
 		///////////////////// Xử lý ở phần Chart//////////////////////////////
-		
+
 		manage.chartYear.addActionListener(new ActionListener() {
 
-	        public void actionPerformed(ActionEvent e)
-	        {
-	            makeChart(manage.chartYear.getSelectedItem().toString());
-	        }
-	    });  
+			public void actionPerformed(ActionEvent e) {
+				makeChart(manage.chartYear.getSelectedItem().toString());
+			}
+		});
 	}
 
 	// validate register email, password, name
@@ -767,28 +765,26 @@ public class RunClient {
 	}
 
 	public static CategoryDataset createDataset(String date) {
-		ArrayList<ManageVehicle> listVehicle = null;
-		ArrayList<ManageVehicle> listVehicle2 = new ArrayList<>();
+		ArrayList<ManageVehicle> listVehicleManage = null;
+		ArrayList<Vehicle> listVehicle = new ArrayList<>();
+		ArrayList<ManageVehicle> listVehicleManage2 = new ArrayList<>();
 		try {
-			listVehicle = client.getAllManageVehicle();
+			listVehicleManage = client.getAllManageVehicle();
+			listVehicle = client.getAllVehicle();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		addDataToDateComboBox(listVehicle);
+		addDataToDateComboBox(listVehicleManage);
 		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		for (ManageVehicle manageVehicle : listVehicle) {
-			Vehicle vehicle = null;
-			try {
-				vehicle = client.getVehicleById(manageVehicle.getVehicle_id());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(getYearFromText(manageVehicle.getDate()).equals(date) || date.equals("Tất cả")) {
-				listVehicle2.add(manageVehicle);
-				dataset.addValue(countVehicle(listVehicle2, manageVehicle.getVehicle_id()), "Số lượt đăng ký",
-						vehicle.getName());
+		for (ManageVehicle manageVehicle : listVehicleManage) {
+			for (Vehicle vehicle : listVehicle) {
+				if (getYearFromText(manageVehicle.getDate()).equals(date) || date.equals("Tất cả")) {
+					listVehicleManage2.add(manageVehicle);
+
+					dataset.addValue(countVehicle(listVehicleManage2, vehicle.getId()), "Số lượt đăng ký",
+							vehicle.getName());
+				}
 			}
 
 		}
@@ -807,17 +803,19 @@ public class RunClient {
 	}
 
 	public static JFreeChart createChart(String date) {
-	
+		System.out.println(date.equals("Tất cả"));
 		String nameChart = "";
-		if( date == null) nameChart = "TỪ TRƯỚC TỚI NAY";
-		else nameChart = "CỦA NĂM" + date;
-		JFreeChart barChart = ChartFactory.createBarChart("BIỂU ĐỒ ĐĂNG KÝ "+date, "Tên xe",
-				"Số lượt đăng ký", createDataset(date), PlotOrientation.VERTICAL, false, false, false);
+		if (date.equals("Tất cả"))
+			nameChart = "TỪ TRƯỚC TỚI NAY";
+		else
+			nameChart = "CỦA NĂM" + date;
+		JFreeChart barChart = ChartFactory.createBarChart("BIỂU ĐỒ ĐĂNG KÝ " + nameChart, "Tên xe", "Số lượt đăng ký",
+				createDataset(date), PlotOrientation.VERTICAL, false, false, false);
 		return barChart;
 	}
 
 	public static void makeChart(String date) {
-		
+
 		manage.panelChart1.removeAll();
 		ChartPanel chartPanel = new ChartPanel(createChart(date));
 		chartPanel.setPreferredSize(

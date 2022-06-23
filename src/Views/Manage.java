@@ -7,14 +7,17 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Insets;
+import javax.swing.Timer;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.event.ChangeListener;
@@ -33,7 +36,8 @@ public class Manage extends JFrame {
 	public String path = "E:\\Java\\Eclipse\\Manage\\Imgs\\";
     public JPanel contentPane, LogoutPanel;
     public JTable tableUser;
-
+    Timer timer;
+    int index = 1;
     public JLabel AuthUser;
     public JComboBox roleUser, nameUserManage, nameVehicleManage,chartYear;
     public JTextField searchUser;
@@ -268,8 +272,7 @@ public class Manage extends JFrame {
         Home.setLayout(null);
 
         slide = new JLabel("");
-        slide.setIcon(new ImageIcon("E:\\JAVA\\Client\\Imgs\\1 (1).jpg"));
-        slide.setBounds(142, 99, 600, 424);
+        slide.setBounds(196, 166, 500, 360);
         Home.add(slide);
         Object[] roles = { "Admin", "User" };
 
@@ -835,7 +838,21 @@ public class Manage extends JFrame {
         panelChart.add(lblNewLabel_2);
         
         setLocationRelativeTo(null);
-
+       
+        timer = new Timer(1000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+					if(index>12) {
+						index =1;
+					}
+					Image image = new ImageIcon(path+"3 ("+index+").png").getImage();
+					Icon ic = new ImageIcon(image.getScaledInstance(slide.getWidth(), slide.getHeight(), image.SCALE_SMOOTH));
+					slide.setIcon(ic);
+					index++;
+			}
+		});
+        timer.start();
         HomePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
