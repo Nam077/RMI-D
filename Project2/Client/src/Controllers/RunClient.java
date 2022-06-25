@@ -812,7 +812,7 @@ public class RunClient {
 	}
 
 	public static JFreeChart createChart(String date) {
-		System.out.println(date.equals("Tất cả"));
+		
 		String nameChart = "";
 		if (date.equals("Tất cả"))
 			nameChart = "TỪ TRƯỚC TỚI NAY";
