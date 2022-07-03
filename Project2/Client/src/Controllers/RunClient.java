@@ -6,6 +6,7 @@ import Views.Login;
 import Views.Manage;
 import Views.Register;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -16,10 +17,15 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -632,6 +638,21 @@ public class RunClient {
 
 			}
 		});
+		
+		certificate.exportCer.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+					getSaveSnapShot(certificate.PanelExport, "Cer/register"+timestamp.getTime()+".png");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		///////////////////// Xử lý ở phần Chart//////////////////////////////
 
 		manage.chartYear.addActionListener(new ActionListener() {
@@ -853,6 +874,20 @@ public class RunClient {
 		String[] dateArr = date.split("-");
 		return dateArr[0];
 
+	}
+	public static void getSaveSnapShot(Component component, String fileName) throws Exception {
+		BufferedImage img = getScreenShot(component);
+		// write the captured image as a PNG
+		ImageIO.write(img, "png", new File(fileName));
+	}
+
+	public static BufferedImage getScreenShot(Component component) {
+
+		BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+		// paints into image's Graphics
+		component.paint(image.getGraphics());
+		return image;
 	}
 
 }
