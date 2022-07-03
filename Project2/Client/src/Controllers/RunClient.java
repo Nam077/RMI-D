@@ -785,17 +785,16 @@ public class RunClient {
 			e.printStackTrace();
 		}
 		addDataToDateComboBox(listVehicleManage);
-		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		for (ManageVehicle manageVehicle : listVehicleManage) {
-			for (Vehicle vehicle : listVehicle) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		for(Vehicle vehicle : listVehicle) {
+			listVehicleManage2 = new ArrayList<>();
+			for(ManageVehicle manageVehicle: listVehicleManage) {
 				if (getYearFromText(manageVehicle.getDate()).equals(date) || date.equals("Tất cả")) {
 					listVehicleManage2.add(manageVehicle);
-
 					dataset.addValue(countVehicle(listVehicleManage2, vehicle.getId()), "Số lượt đăng ký",
-							vehicle.getName());
+							vehicle.getName()+" - "+ vehicle.getId());
 				}
 			}
-
 		}
 		return dataset;
 	}
